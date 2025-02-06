@@ -7,7 +7,7 @@ from app.schemas.user_schema import user_model
 
 auth_ns = Namespace("auth", description="Authentication management")
 
-@auth_ns("/register")
+@auth_ns.route("/register")
 class Register(Resource):
     @auth_ns.expect(user_model)
     def post(self):
