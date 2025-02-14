@@ -2,188 +2,99 @@
 
 A simple task management application that allows users to create, manage, and track tasks efficiently. This app provides authentication, task organization, and a user-friendly interface for seamless task handling.
 
-## Specification
+## Table of Contents
 
-## 1. Data Model
-
-## 1.1 User Model
-
-- `id` (Primary Key)
-- `username` (String, Unique)
-- `password` (String, Hashed)
-- `email` (String, Unique)
-- Other relevant fields...
-
-## 1.2 ToDo Model
-
-- `id` (Primary Key)
-- `task` (String)
-- `is_complete` (Boolean, Default: False)
-- `user_id` (Foreign Key to User)
-- Other relevant fields...
-
-## 2. Activities [BL(Business Logic)]
-
-## 2.1 User Management
-
-- Register
-- Login (Authentication)
-- Logout
-
-## 2.2 Task Management
-
-- Create a Task
-- Read/View Tasks
-- Update a Task
-- Delete a Task
-
-## 3. REST API
-
-## 3.1 User Management Endpoints
-
-- **POST** `/register` - Register a new user  
-- **POST** `/login` - Authenticate user
-- **GET** `/logout` - Logout user
-
-## 3.2 Task Management Endpoints
-
-- **POST** `/tasks` - Create a new task
-- **GET** `/tasks` - Retrieve all tasks for the logged-in user
-- **GET** `/tasks/{task_id}` - Retrieve a specific task
-- **PUT** `/tasks/{task_id}` - Update a task
-- **DELETE** `/tasks/{task_id}` - Delete a task
-
-## 3.3 Schemas
-
-#### 3.3.1 User Schema
-
-- `id` (Integer, ReadOnly)
-- `username` (String, Required)
-- `email` (String, Required, Unique)
-- `password` (String, Required)
-
-#### 3.3.2 User login Schema
-
-- `username` (String, Required)
-- `password` (String, Required)
-
-#### 3.3.3 Task Schema
-
-- `id` (Integer, ReadOnly)
-- `task` (String, Required)
-- `is_complete` (Boolean, Default: False)
-
-#### 3.3.4 Task Update Schema
-
-- `task` (String, Required)
-- `is_complete` (Boolean, Default: False)
+1. [Description](#description)
+2. [Installation](#installation)  
+   1. [Clone the Repository](#1-clone-the-repository)  
+   2. [Set Up the Virtual Environment](#2-set-up-the-virtual-environment)  
+   3. [Install Dependencies](#3-install-the-dependencies)  
+   4. [Set Up Environment Variables](#4-set-up-the-environment-variables)  
+3. [Running the Application](#running-the-application)  
+4. [Database Migrations](#database-migrations)  
+5. [Project Structure](#project-structure)  
+6. [Scaffold Script](#scaffold-script)  
 
 ---
 
-## 4. UI Pages
+## Description
 
-### 4.1 Registration Page
+The **TODO APP** is a web-based application built with Flask that allows users to manage their tasks. Users can:
 
-- **Features**  
-  - register new user
+- Register and log in securely.
+- Create, update, and delete tasks.
+- View all tasks on a user-friendly dashboard.
 
-- **Form Fields**
-  - Username (Input Text)
-  - Email (Input Text)
-  - Password (Input Password)
-  - Submit Button
+## Installation
 
-### 4.2 Login Page
+### 1. Clone the Repository
 
-- **Features**
-  - authenticate user
+```bash
+git clone https://github.com/yourusername/todo-app.git
+cd todo-app
+```
 
-- **Form Fields**
-  - Username (Input Text)
-  - Password (Input Password)
-  - Submit Button
+### 2. Set Up the Virtual Environment
 
-### 4.3 Dashboard
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
 
-- **Features**
-  - Task Creation (Add new tasks)  Operations
-  - Task Get/list  Operations
-  - Task Update/Edit Operations
-  - Task Delete/Remove Operations
+### 3. Install the Dependencies
 
-### 4.3.1 Dashboard Task Edit page
+```bash
+pip install -r requirements.txt
+```
 
-- **Features**
-  - update selected task
+### 4. Set Up Environment Variables
 
-- **Form Fields**
-  - Task (Input Text)
-  - Is Completed (Checkbox)
-  - Submit Button
+Create a `.env` file in the root directory of the project and add the following environment variables:
 
-### 4.4 404 page
+```text
+SECRET_KEY=your_secret_key
+DATABASE_URI=mysql+mysqlconnector://root:top!secret@localhost:3307/todo_db
+FLASK_APP=run.py
+FLASK_ENV=development
+```
 
-- **Features**
-  - display meaningful information for page or content not found
+## Running the Application
 
-## 4.4 Forms
+1. **Activate the virtual environment**:
 
-#### 4.4.1 Login Form
+   ```bash
+   source .venv/bin/activate
+   ```
 
-- Username (Input Text)
-- Password (Input Password)
-- Submit Button
+2. **Run the Flask application**:
 
-#### 4.4.2 Registration Form
+   ```bash
+   flask run
+   ```
 
-- Username (Input Text)
-- Email (Input Text)
-- Password (Input Password)
-- Submit Button
+   The application will be available at [http://127.0.0.1:5000](http://127.0.0.1:5000).
 
-#### 4.4.3 Task Form
+## Database Migrations
 
-- Task (Input Text)
-- Is Completed (Checkbox)
-- Submit Button
+1. **Initialize the database migrations**:
 
-## 5. Views
+   ```bash
+   flask db init
+   ```
 
-### 5.1 Error Handling
+2. **Create a new migration**:
 
-- **404 Page Not Found** - Render `404.html` template
+   ```bash
+   flask db migrate -m "Initial migration"
+   ```
 
-### 5.2 Authentication
+3. **Apply the migration**:
 
-- **Login Page (`/login`)**
-  - GET: Render login form in the `login.html`
-  - POST: Authenticate user and redirect to `dashboard page`
+   ```bash
+   flask db upgrade
+   ```
 
-- **Register Page (`/register`)**
-  - GET: Render registration form  in the `register.html`
-  - POST: Register new user and redirect to `login page`
-
-- **Logout (`/logout`)**
-  - Logs out user and redirects to `home page`
-
-## 5.3 Home  
-
-- **Landing Page(`/home`)** - Render `home.html` template
-
-## 5.4 Dashboard
-
-- **Dashboard page (`/dashboard`)**
-  - GET: Render user's tasks list and display in the `dashboard.html` [edit/delete tasks included in the list]
-  - GET: Render tasks form and display in the `dashboard.html`
-  - POST: Add a new task
-
-### 5.5 Task Management
-
-- **Task Edit (`/todo/<int:todo_id>`)**
-  - GET: Render task edit form  in the `edit_todo.html`
-  - POST: Update or delete task
-
-## 6. Scaffold Structure
+## Project Structure
 
 ```text
 todo-app/
@@ -194,8 +105,8 @@ todo-app/
 │   └── launch.json          # Debugging configurations
 ├── app/                     # Application logic
 │   ├── __init__.py          # Initialize Flask app
-│   ├── utils/               # Database models
-│   │   ├── __init__.py      # package file
+│   ├── utils/               # Utility functions
+│   │   ├── __init__.py      # Package file
 │   │   ├── auth_utils.py    # User authentication utilities
 │   ├── models/              # Database models
 │   │   ├── __init__.py      # Initialize models
@@ -218,9 +129,9 @@ todo-app/
 │   ├── templates/           # HTML templates
 │   │   ├── base.html        # Base template
 │   │   ├── login.html       # Login template
-|   |   ├── home.html        # Home page
-|   |   ├── dashboard.html   # Dashboard page
-|   |   ├── edit_todo.html   # Edit ToDo page
+│   │   ├── home.html        # Home page
+│   │   ├── dashboard.html   # Dashboard page
+│   │   ├── edit_todo.html   # Edit ToDo page
 │   │   ├── register.html    # Register template
 │   │   ├── todo.html        # ToDo template
 │   │   └── 404.html         # 404 error template
@@ -233,7 +144,7 @@ todo-app/
 └── README.md                # Project documentation
 ```
 
-## 7. Scaffold Script
+## Scaffold Script
 
 The following script automates the creation of the Flask project structure, including virtual environment setup, installing dependencies, and populating config files.
 
@@ -261,78 +172,7 @@ def setup_virtualenv(parent: Path):
     subprocess.run(["python3", "-m", "venv", str(venv_path)])
     subprocess.run([str(venv_path / "bin/pip"), "install", "-r", str(parent / "requirements.txt")])
 
-project_structure = {
-    ".gitignore": "",
-    ".env": "",
-    ".vscode": {
-        "settings.json": json.dumps({
-            "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
-            "editor.formatOnSave": True
-        }, indent=4),
-        "launch.json": json.dumps({
-            "version": "0.2.0",
-            "configurations": [
-                {
-                    "name": "Python: Run run.py",
-                    "type": "python",
-                    "request": "launch",
-                    "program": "${workspaceFolder}/run.py",
-                    "console": "integratedTerminal",
-                    "envFile": "${workspaceFolder}/.env",
-                    "pythonPath": "${workspaceFolder}/.venv/bin/python"
-                }
-            ]
-        }, indent=4)
-    },
-    "README.md": "",
-    "requirements.txt": """alembic==1.14.0
-aniso8601==9.0.1
-attrs==24.3.0
-blinker==1.9.0
-click==8.1.7
-Flask==2.2.5
-Flask-HTTPAuth==4.8.0
-Flask-JWT-Extended==4.4.4
-Flask-Login==0.6.3
-Flask-Migrate==4.0.4
-flask-restx==1.3.0
-Flask-SQLAlchemy==3.1.1
-Flask-WTF==1.2.2
-greenlet==3.1.1
-importlib_resources==6.4.5
-itsdangerous==2.2.0
-Jinja2==3.1.4
-jsonschema==4.23.0
-jsonschema-specifications==2024.10.1
-Mako==1.3.8
-MarkupSafe==3.0.2
-mysql-connector-python==8.0.33
-mysqlclient==2.2.7
-protobuf==3.20.3
-PyJWT==2.10.1
-PyMySQL==1.1.1
-python-dotenv==1.0.0
-pytz==2024.2
-referencing==0.35.1
-rpds-py==0.22.3
-SQLAlchemy==2.0.36
-typing_extensions==4.12.2
-Werkzeug==3.1.3
-WTForms==3.2.1""",
-    "app": {
-        "__init__.py": "",
-        "models": {"__init__.py": "", "user.py": "", "todo.py": ""},
-        "routes": {"__init__.py": "", "auth.py": "", "todo.py": "", "views.py": ""},
-        "schemas": {"__init__.py": "", "user_schema.py": "", "todo_schema.py": ""},
-        "utils": {"__init__.py": "", "auth_utils.py": ""}
-        "forms": {"__init__.py": "", "login_form.py": "", "register_form.py": "", "todo_form.py": ""},
-        "templates": {"base.html": "", "login.html": "", "register.html": "", "edit_todo.html": "", "home.html":"", "dashboard.html": "", "404.html":""},
-        "static": {"style.css": "", "script.js": ""},
-    },
-    "run.py": ""
-}
-
 destination = Path.cwd()
-create_flask_scaffold(destination, project_structure)
+create_flask_scaffold(destination, {})
 setup_virtualenv(destination)
 ```
