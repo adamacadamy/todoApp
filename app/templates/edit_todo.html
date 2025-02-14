@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Task{% endblock %}
+
+{% block content %}
+    <h2>Edit Task</h2>
+
+    <!-- Form for Editing Task -->
+    <form action="{{ url_for('views.todo_edit', todo_id=todo.id) }}" method="POST">
+        {{ form.hidden_tag() }} <!-- CSRF Protection -->
+
+        <!-- Title Field -->
+        <label for="task">Task</label>
+        {{ form.task(class="input", placeholder="Enter task title") }}
+        <br/><br/>
+
+      
+        <!-- Completed Checkbox -->
+        <label for="is_completed">
+            {{ form.is_completed() }} Completed
+        </label>
+        <br/><br/>
+
+        <!-- Submit Button -->
+        {{ form.submit(class="btn btn-primary", value="Update Task") }}
+    </form>
+{% endblock %}

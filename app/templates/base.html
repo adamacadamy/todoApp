@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>  {% block title %}To-Do Management{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <!-- Header with Navigation -->
+    <header>
+        <h1>To-Do Management</h1>
+        <nav>
+            <a href="{{ url_for('views.home') }}">Home</a> |
+            {% if current_user and current_user.is_authenticated %}
+                <span>Welcome, {{ current_user.username }}!</span> |
+                <a href="{{ url_for('views.dashboard') }}">My To-Dos</a> |
+                <a href="{{ url_for('views.logout') }}">Logout</a>
+            {% else %}
+                <a href="{{ url_for('views.login') }}">Login</a> |
+                <a href="{{ url_for('views.register') }}">Register</a>
+            {% endif %}
+        
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main> 
+        <!-- Flash Messages (Success / Error Notifications) -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %} 
+                {% for category, message in messages %}
+                    <div class="flash-message {{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- Page-specific content -->
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- JavaScript -->
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <noscript>
+        <p style="color: red;">JavaScript is required for this site to function properly.</p>
+    </noscript>
+
+</body>
+</html>

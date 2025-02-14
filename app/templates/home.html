@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome to To-Do App{% endblock %}
+{% block content %}
+    <h2>Welcome to the To-Do Management App</h2>
+    <p>Organize your tasks efficiently!</p>
+    <a href="{{ url_for('views.dashboard') }}" class="btn">Get Started</a>
+{% endblock %}
