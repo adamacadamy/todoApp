@@ -88,13 +88,15 @@ A simple task management application that allows users to create, manage, and tr
 graph TD;
     A[Registration Page] -->|User registers| B[Login Page];
     B -->|User logs in| C[Dashboard];
+    B -->|Login fails| B; 
     C -->|User adds new task| C1[Task Creation];
     C -->|User views tasks| C2[Task List];
     C -->|User edits task| C3[Task Edit Page];
     C -->|User deletes task| C4[Task Deletion];
-    C3 -->|Update selected task| C[Dashboard];
-    C4 -->|Remove selected task| C[Dashboard];
+    C3 -->|Update selected task| C;
+    C4 -->|Remove selected task| C;
     D[404 Page] -->|Invalid page request| D;
+
 
 ```
 
