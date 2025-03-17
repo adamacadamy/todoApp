@@ -3,6 +3,7 @@ from datetime import timedelta
 from functools import wraps
 from http import HTTPStatus
 import json
+import logging
 from typing import Any, Optional
 
 from flask import Flask, g, request
@@ -17,6 +18,9 @@ from flask_login import login_user
 
 from app.models.user import User
 
+# Configure the logger
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 basic_auth = HTTPBasicAuth()
 jwt_auth = JWTManager()
@@ -47,6 +51,7 @@ def generate_token(user: User) -> str:
 
 
 def verify_user_basic(username: str, password: str) -> Optional[User]:  # User | None
+    logger.info(f"username: {username}, password: {password}")
     user = User.query.filter_by(username=username).first()  # user | None
 
     if user and User.check_password(user.password_hash, password):

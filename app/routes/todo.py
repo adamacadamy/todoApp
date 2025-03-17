@@ -38,10 +38,14 @@ class ToDoList(Resource):
             )
             db.session.add(new_todo)
             db.session.commit()
-            return {"message": "To-Do task created successfully."}, HTTPStatus.CREATED
+            return {
+                "success": True,
+                "message": "To-Do task created successfully.",
+            }, HTTPStatus.CREATED
 
         return {
-            "message": "To-Do task not created, payload is corrupt."
+            "success": False,
+            "message": "To-Do task not created, payload is corrupt.",
         }, HTTPStatus.BAD_REQUEST
 
 
@@ -69,7 +73,8 @@ class ToDoResource(Resource):
         data = request.json
         if not data:
             return {
-                "message": "To-Do task not created, payload is corrupt."
+                "success": False,
+                "message": "To-Do task not created, payload is corrupt.",
             }, HTTPStatus.BAD_REQUEST
 
         todo = ToDo.query.get_or_404(task_id)
@@ -77,7 +82,8 @@ class ToDoResource(Resource):
 
         if not todo or todo.user_id != user_id:
             return {
-                "message": "no task identified by the provided task user id exists"
+                "success": False,
+                "message": "no task identified by the provided task user id exists",
             }, HTTPStatus.NOT_FOUND
 
         todo.task = data["task"]
@@ -85,7 +91,10 @@ class ToDoResource(Resource):
         todo.user_id = g.current_user["user_id"]
         db.session.commit()
 
-        return {"message": "To-Do task updated successfully."}, HTTPStatus.OK
+        return {
+            "success": True,
+            "message": "To-Do task updated successfully.",
+        }, HTTPStatus.OK
 
     @todo_ns.doc(security=["basic", "jwt"])
     @auth_required()

@@ -6,7 +6,7 @@ from flask import request
 from app.schemas.user_schema import user_model, user_login_model
 from app.models import db
 from app.models.user import User
-from app.utils.auth_utils import generate_token, verify_user_basic, basic_auth
+from app.utils.auth_utils import auth_required, generate_token, verify_user_basic
 
 auth_ns = Namespace("auth", description="Authentication management")
 
@@ -21,14 +21,20 @@ class Register(Resource):
         existing_user = User.query.filter_by(username=username).first()
 
         if existing_user:  # User | None
-            return {"message": "Username already exists"}, HTTPStatus.CONFLICT
+            return {
+                "success": False,
+                "message": "Username already exists",
+            }, HTTPStatus.CONFLICT
 
         new_user = User.create_user(username, email, password)
 
         db.session.add(new_user)
         db.session.commit()
 
-        return {"message": "User registered successfully"}, HTTPStatus.CREATED
+        return {
+            "success": True,
+            "message": "User registered successfully",
+        }, HTTPStatus.CREATED
 
 
 @auth_ns.route("/login")
@@ -46,16 +52,17 @@ class Login(Resource):
 
         token = generate_token(user)
         return {
+            "success": True,
             "message": "Logged in successfully",
             "token": f"Bearer {token}",
         }, HTTPStatus.OK
 
 
 @auth_ns.route("/logout")
-@auth_ns.doc(security="basic")
 class Logout(Resource):
-    @basic_auth.login_required
+    @auth_ns.doc(security=["basic", "jwt"])
+    @auth_required()
     def get(self):
         """Logout user"""
         logout_user()
-        return {"message": "Logged out successfully"}, HTTPStatus.OK
+        return {"success": True, "message": "Logged out successfully"}, HTTPStatus.OK

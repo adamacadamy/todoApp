@@ -2,6 +2,7 @@ import os
 from dotenv import load_dotenv
 
 from flask import Flask
+from flask_cors import CORS
 from flask_login import LoginManager
 from flask_migrate import Migrate
 
@@ -26,6 +27,8 @@ login_manager = LoginManager()
 
 def create_app() -> Flask:
     app = Flask(__name__)
+    # Allow all localhost and 127.0.0.1 origins
+    CORS(app, supports_credentials=True, resources={r"/*": {"origins": "*"}})
 
     app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URI")
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False

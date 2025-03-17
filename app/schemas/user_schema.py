@@ -14,6 +14,7 @@ user_model = api.model(
 user_login_model = api.model(
     "UserLogin",
     {
+        "success": fields.Boolean(required=True, description="Success status"),
         "username": fields.String(required=True, description="Username"),
         "password": fields.String(required=True, description="Password"),
     },

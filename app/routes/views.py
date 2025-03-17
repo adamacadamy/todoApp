@@ -18,7 +18,7 @@ views_bp = Blueprint("views", __name__)
 
 @views_bp.app_errorhandler(HTTPStatus.NOT_FOUND)
 def page_not_found(error: Exception) -> tuple[str, int]:
-    return render_template("404.html"), HTTPStatus.NOT_FOUND
+    return render_template("404.html"), HTTPStatus.NOT_FOUND    
 
 
 @views_bp.route("/home", methods=["GET"])
